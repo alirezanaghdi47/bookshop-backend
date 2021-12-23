@@ -7,7 +7,7 @@ const cors = require("cors");
 const app = express();
 
 // variables
-const {MONGO_DB_ADDRESS, ORIGIN_1, ORIGIN_2} = process.env;
+const { MONGO_DB_ADDRESS, ORIGIN_1, ORIGIN_2, ORIGIN_3} = process.env;
 
 // connect to database
 mongoose.connect(
@@ -24,13 +24,15 @@ mongoose.connect(
 // middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(cors({
-    origin: [ORIGIN_1, ORIGIN_2],
-    optionsSuccessStatus: 200,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token'],
-    credentials: true
-}));
+app.use(
+   cors({
+      origin: [ORIGIN_1, ORIGIN_2, ORIGIN_3],
+      optionsSuccessStatus: 200,
+      methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+      allowedHeaders: ["Content-Type", "Authorization", "x-auth-token"],
+      credentials: true,
+   })
+);
 
 // controller
 const userController = require("./controller/UserController");
