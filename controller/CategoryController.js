@@ -13,8 +13,8 @@ const admin = require("../middleware/admin");
 // get (api/category/categories)
 router.get("/categories", [auth, admin], async (req, res) => {
 
-    const page = parseInt(req.query.page);
-    const limit = parseInt(req.query.limit);
+    const page = parseInt(req.query.page > 0 ? req.query.page : 0);
+    const limit = parseInt(req.query.limit) || 5;
 
     const categoriesCount = await Category.find({isRemoved: false}).count();
 

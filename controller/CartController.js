@@ -17,8 +17,8 @@ const sendMail = require("../middleware/mail");
 // get (api/cart/carts)
 router.get("/carts", auth, async (req, res) => {
 
-    const page = parseInt(req.query.page);
-    const limit = parseInt(req.query.limit);
+    const page = parseInt(req.query.page > 0 ? req.query.page : 0);
+    const limit = parseInt(req.query.limit) || 5;
 
     // carts count
     const cartsCount = await Cart

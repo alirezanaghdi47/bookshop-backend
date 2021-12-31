@@ -19,8 +19,8 @@ const {uploadImage, upload} = require("../middleware/upload");
 // get (api/book/books)
 router.get("/books", [auth, admin], async (req, res) => {
 
-    const page = parseInt(req.query.page);
-    const limit = parseInt(req.query.limit);
+    const page = parseInt(req.query.page > 0 ? req.query.page : 0);
+    const limit = parseInt(req.query.limit) || 5;
 
     const booksCount = await Book
         .find({isRemoved: false})
@@ -58,8 +58,9 @@ router.get("/books/:id", async (req, res) => {
 
 // get (api/book/discounted-books)
 router.get("/discounted-books", async (req, res) => {
-    const page = parseInt(req.query.page);
-    const limit = parseInt(req.query.limit);
+
+    const page = parseInt(req.query.page > 0 ? req.query.page : 0);
+    const limit = parseInt(req.query.limit) || 5;
 
     const booksCount = await Book
         .find({discount: {$gt: 0}, isPublished: true, isRemoved: false})
@@ -80,8 +81,9 @@ router.get("/discounted-books", async (req, res) => {
 
 // get (api/book/newest-books)
 router.get("/newest-books", async (req, res) => {
-    const page = parseInt(req.query.page);
-    const limit = parseInt(req.query.limit);
+
+    const page = parseInt(req.query.page > 0 ? req.query.page : 0);
+    const limit = parseInt(req.query.limit) || 5;
 
     const booksCount = await Book
         .find({isPublished: true, isRemoved: false})
@@ -104,8 +106,8 @@ router.get("/newest-books", async (req, res) => {
 // get (api/book/published-books)
 router.get("/published-books", async (req, res) => {
 
-    const page = parseInt(req.query.page);
-    const limit = parseInt(req.query.limit);
+    const page = parseInt(req.query.page > 0 ? req.query.page : 0);
+    const limit = parseInt(req.query.limit) || 5;
     const search = req.query.search;
     const sort = req.query.sort;
 
@@ -113,11 +115,9 @@ router.get("/published-books", async (req, res) => {
     let booksCount = 0;
 
     if (search) {
-        booksCount = await Book.find({
-            isPublished: true,
-            isRemoved: false,
-            name: {$regex: search, $options: "i"}
-        }).count();
+        booksCount = await Book
+            .find({isPublished: true, isRemoved: false, name: {$regex: search, $options: "i"}})
+            .count();
         books = await Book
             .find({isPublished: true, name: {$regex: search, $options: "i"}, isRemoved: false})
             .populate({
@@ -128,7 +128,9 @@ router.get("/published-books", async (req, res) => {
             .limit(limit ? limit : "")
             .sort(sort);
     } else {
-        booksCount = await Book.find({isPublished: true, isRemoved: false}).count();
+        booksCount = await Book
+            .find({isPublished: true, isRemoved: false})
+            .count();
         books = await Book
             .find({isPublished: true, isRemoved: false})
             .populate({

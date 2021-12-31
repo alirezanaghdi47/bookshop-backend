@@ -18,8 +18,8 @@ const {uploadAvatar, upload} = require("../middleware/upload");
 // get (api/user/users)
 router.get("/users", [auth, admin], async (req, res) => {
 
-    const page = parseInt(req.query.page);
-    const limit = parseInt(req.query.limit);
+    const page = parseInt(req.query.page > 0 ? req.query.page : 0);
+    const limit = parseInt(req.query.limit) || 5;
 
     const usersCount = await User.find({_id: {$ne: req.user._id}}).count();
 

@@ -18,8 +18,8 @@ const {uploadAdvertise, upload} = require("../middleware/upload");
 // get (api/advertise/advertises)
 router.get("/advertises", async (req, res) => {
 
-    const page = parseInt(req.query.page);
-    const limit = parseInt(req.query.limit);
+    const page = parseInt(req.query.page > 0 ? req.query.page : 0);
+    const limit = parseInt(req.query.limit) || 5;
 
     const advertiseCount = await Advertise.find({isRemoved: false}).count();
 
@@ -38,8 +38,8 @@ router.get("/advertises", async (req, res) => {
 // get (api/advertise/published-advertises)
 router.get("/published-advertises", async (req, res) => {
 
-    const page = parseInt(req.query.page);
-    const limit = parseInt(req.query.limit);
+    const page = parseInt(req.query.page > 0 ? req.query.page : 0);
+    const limit = parseInt(req.query.limit) || 5;
 
     const advertiseCount = await Advertise.find({isPublished: true, isRemoved: false}).count();
 
