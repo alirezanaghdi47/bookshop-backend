@@ -56,53 +56,6 @@ router.get("/books/:id", async (req, res) => {
     res.send(book);
 });
 
-// get (api/book/discounted-books)
-router.get("/discounted-books", async (req, res) => {
-
-    const page = parseInt(req.query.page > 0 ? req.query.page : 0);
-    const limit = parseInt(req.query.limit) || 5;
-
-    const booksCount = await Book
-        .find({discount: {$gt: 0}, isPublished: true, isRemoved: false})
-        .count();
-
-    const books = await Book
-        .find({discount: {$gt: 0}, isPublished: true, isRemoved: false})
-        .populate({
-            path: "category",
-            model: "Category"
-        })
-        .skip(page ? page * limit : "")
-        .limit(limit ? limit : "");
-
-    // result
-    res.send({data: books, count: booksCount});
-});
-
-// get (api/book/newest-books)
-router.get("/newest-books", async (req, res) => {
-
-    const page = parseInt(req.query.page > 0 ? req.query.page : 0);
-    const limit = parseInt(req.query.limit) || 5;
-
-    const booksCount = await Book
-        .find({isPublished: true, isRemoved: false})
-        .count();
-
-    const books = await Book
-        .find({isPublished: true, isRemoved: false})
-        .populate({
-            path: "category",
-            model: "Category"
-        })
-        .skip(page ? page * limit : "")
-        .limit(limit ? limit : "")
-        .sort("-date");
-
-    // result
-    res.send({data: books, count: booksCount});
-});
-
 // get (api/book/published-books)
 router.get("/published-books", async (req, res) => {
 
@@ -162,6 +115,36 @@ router.get("/published-books/:id", async (req, res) => {
 
     //result
     res.send(book);
+});
+
+// get (api/book/relative-books)
+router.get("/relative-books/:id", async (req, res) => {
+
+    // validation book id
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return res.status(400).send("کتابی با این مشخصات وجود ندارد");
+
+    const book = await Book
+        .findById(req.params.id)
+        .populate({
+            path: "category",
+            model: "Category",
+        });
+
+    const booksCount = await Book
+        .find({_id: {$ne: req.params.id}, isPublished: true, isRemoved: false, category: {_id: book.category._id}})
+        .count();
+
+    const books = await Book
+        .find({_id: {$ne: req.params.id}, isPublished: true, isRemoved: false, category: {_id: book.category._id}})
+        .populate({
+            path: "category",
+            model: "Category",
+        })
+        .limit(10)
+        .sort("-date");
+
+    // result
+    res.send({data: books, count: booksCount});
 });
 
 // post (api/book/add-book)
@@ -252,23 +235,6 @@ router.delete("/delete-book/:id", [auth, admin], async (req, res) => {
 
     // validation book id
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) return res.status(400).send("کتابی با این مشخصات وجود ندارد");
-
-    // edit advertise
-    const advertises = await Advertise
-        .find()
-        .populate({
-            path: "book",
-            model: "Book"
-        });
-
-    for (let i = 0; i < advertises.length; i++) {
-        const advertise = await Advertise.findById(advertises[i]._id);
-
-        if (advertise?.book?._id.toString() === req.params.id.toString()) {
-            advertise.isPublished = false;
-            advertise.save();
-        }
-    }
 
     // delete book
     const book = await Book.findById(req.params.id);
