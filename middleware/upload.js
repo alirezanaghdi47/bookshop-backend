@@ -44,31 +44,6 @@ const uploadImage = async (buffer , filename , width , height) => {
         });
 }
 
-// upload advertise with optimize
-const uploadAdvertise = async (buffer , filename) => {
-    await sharp(buffer)
-        .resize({
-            width: 1920,
-            height: 1080,
-            fit: "cover",
-            position: "center"
-        })
-        .toBuffer()
-        .then(async (newBuffer) => {
-            try {
-                await s3.send(new PutObjectCommand({
-                    Bucket: 'bookshop',
-                    Key: filename,
-                    ACL: 'public-read',
-                    Body: newBuffer
-                }));
-                console.log("file added");
-            } catch (err) {
-                console.log("file rejected");
-            }
-        });
-}
-
 // upload avatar with optimize
 const uploadAvatar = async (buffer , filename) => {
     await sharp(buffer)
@@ -96,5 +71,4 @@ const uploadAvatar = async (buffer , filename) => {
 
 module.exports.upload = upload;
 module.exports.uploadImage = uploadImage;
-module.exports.uploadAdvertise = uploadAdvertise;
 module.exports.uploadAvatar = uploadAvatar;

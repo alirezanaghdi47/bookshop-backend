@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const fileType = require("file-type");
 
 // variables
-const {ADMIN_EMAIL, ADMIN_ACL, USER_ACL, IMAGE_ENPOINT, EMAIL_SERVICE_USERNAME} = process.env;
+const {ADMIN_EMAIL, ADMIN_ACL, USER_ACL, IMAGE_ENPOINT} = process.env;
 
 // model
 const {User} = require("../model/UserModel");
@@ -12,7 +12,6 @@ const {User} = require("../model/UserModel");
 // middleware
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
-const sendMail = require("../middleware/mail");
 const {uploadAvatar, upload} = require("../middleware/upload");
 
 // get (api/user/users)
@@ -79,103 +78,6 @@ router.post("/login", async (req, res) => {
 
     // result
     res.send({data: token, message: "شما به اکانت خود وارد شدید"});
-});
-
-// post (api/user/forget-password)
-router.post("/forget-password", async (req, res) => {
-
-    // check user availability
-    let user = await User.findOne({email: req.body.email});
-    if (!user) return res.status(400).send("کاربری با این مشخصات وجود ندارد");
-
-    // generate random key
-    user.forgetKey = user.generateVerifyKey();
-    user.expireForgetKey = Date.now() + 2 * 60 * 1000;
-    user.save();
-
-    // send mail
-    await sendMail({
-        from: EMAIL_SERVICE_USERNAME,
-        to: req.body.email,
-        subject: "بازیابی رمز عبور",
-        template: 'email',
-        context: {
-            subtitle: "کد بازیابی رمز عبور",
-            code: user.forgetKey
-        }
-    });
-
-    res.send({data: {email: req.body.email, expireForgetKey: user.expireForgetKey}});
-});
-
-// post (api/user/resend-key)
-router.post("/resend-key", async (req, res) => {
-
-    // check user availability
-    let user = await User.findOne({email: req.body.email});
-    if (!user) return res.status(400).send("کاربری با این مشخصات وجود ندارد");
-
-    // generate random key
-    user.forgetKey = user.generateVerifyKey();
-    user.expireForgetKey = Date.now() + 2 * 60 * 1000;
-    user.save();
-
-    // send mail
-    await sendMail({
-        from: EMAIL_SERVICE_USERNAME,
-        to: req.body.email,
-        subject: "بازیابی رمز عبور",
-        template: 'email',
-        context: {
-            subtitle: "کد بازیابی رمز عبور",
-            code: user.forgetKey
-        }
-    });
-
-    res.send({
-        data: {email: req.body.email, expireForgetKey: user.expireForgetKey},
-        message: "ایمیل کد اعتبار سنجی برای شما ارسال شد"
-    });
-});
-
-// post (api/user/verify-key)
-router.post("/verify-key", async (req, res) => {
-
-    // check user availability
-    let user = await User.findOne({email: req.body.email});
-    if (!user) return res.status(400).send("کاربری با این مشخصات وجود ندارد");
-
-    if (req.body.forgetKey === user.forgetKey) {
-        if (user.expireForgetKey > Date.now()) {
-            res.send("کد اعتبارسنجی صحیح است");
-        } else {
-            res.status(400).send("زمان ۲ دقیقه ای شما به پایان رسیده است");
-        }
-    } else {
-        res.status(400).send("کد اعتبارسنجی اشتباه است");
-    }
-
-});
-
-// post (api/user/confirm-password)
-router.post("/confirm-password", async (req, res) => {
-
-    // check user availability
-    let user = await User.findOne({email: req.body.email});
-    if (!user) return res.status(400).send("کاربری با این مشخصات وجود ندارد");
-
-    // validate forget key expire time
-    if (user.expireForgetKey < Date.now() + 300) return res.status(400).send("کد اعتبارسنجی فاقد اعتبار است");
-
-    // encrypt password
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(req.body.password, salt);
-    user.forgetKey = "";
-    user.expireForgetKey = 0;
-    await user.save();
-
-    // result
-    res.send("رمز عبور تغییر کرد");
 });
 
 // put (api/user/edit-user)

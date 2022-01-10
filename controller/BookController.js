@@ -9,7 +9,6 @@ const {IMAGE_ENPOINT} = process.env;
 // model
 const {Book} = require("../model/BookModel");
 const {Category} = require("../model/CategoryModel");
-const {Advertise} = require("../model/AdvertiseModel");
 
 // middleware
 const auth = require("../middleware/auth");

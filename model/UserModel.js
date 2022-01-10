@@ -51,14 +51,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "",
     },
-    forgetKey: {
-        type: String,
-        default: ""
-    },
-    expireForgetKey: {
-        type: Number,
-        default: 0
-    },
 }, {timestamps: true, versionKey: false});
 
 // schema methods
@@ -74,14 +66,6 @@ userSchema.methods.generateAuthToken = function () {
         address: this.address,
         postalCode: this.postalCode,
     }, SECRET_KEY, {expiresIn: "24h"});
-}
-
-userSchema.methods.generateVerifyKey = function () {
-    let temp = [];
-    for (let i = 0; i < 6; i++) {
-        temp.push(Math.floor(Math.random() * 10));
-    }
-    return temp.join("");
 }
 
 // model

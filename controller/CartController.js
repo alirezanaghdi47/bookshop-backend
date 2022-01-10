@@ -2,9 +2,6 @@ const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
 
-// variables
-const {EMAIL_SERVICE_USERNAME} = process.env;
-
 // model
 const {Cart} = require("../model/CartModel");
 const {Book} = require("../model/BookModel");
@@ -12,7 +9,6 @@ const {Order} = require("../model/OrderModel");
 
 // middleware
 const auth = require("../middleware/auth");
-const sendMail = require("../middleware/mail");
 
 // get (api/cart/carts)
 router.get("/carts", auth, async (req, res) => {
@@ -128,20 +124,8 @@ router.patch("/edit-cart/:id", auth, async (req, res) => {
     cart.isOpen = false;
     cart.save();
 
-    // send mail
-    await sendMail({
-        from: EMAIL_SERVICE_USERNAME,
-        to: req.user.email,
-        subject: "سفارش خرید",
-        template: 'email',
-        context: {
-            subtitle: "کد پیگیری سفارش شما",
-            code: cart._id
-        }
-    });
-
     // result
-    res.send("کد پیگیری خرید برای شما ارسال شد");
+    res.send("خرید شما با موفقیت انجام شد");
 });
 
 module.exports = router;
