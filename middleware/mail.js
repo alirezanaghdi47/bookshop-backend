@@ -6,8 +6,12 @@ const hbs = require('nodemailer-express-handlebars');
 const {EMAIL_SERVICE_USERNAME, EMAIL_SERVICE_PASSWORD} = process.env;
 
 const mailTransporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
+    host: "smtp-mail.outlook.com",
+    secureConnection: false,
     port: 587,
+    tls: {
+        ciphers:'SSLv3'
+    },
     auth: {
         user: EMAIL_SERVICE_USERNAME,
         pass: EMAIL_SERVICE_PASSWORD
