@@ -1,13 +1,13 @@
-const dotenv = require("dotenv").config();
+const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const express = require("express");
 const bodyParser = require('body-parser');
 const cors = require("cors");
 
+dotenv.config();
 const app = express();
 
 // variables
-// const {MONGO_DB_ADDRESS, ORIGIN_1, ORIGIN_2 , ORIGIN_3 , ORIGIN_4} = process.env;
 const {MONGO_DB_ADDRESS, ORIGIN_1, ORIGIN_2} = process.env;
 
 // connect to database
@@ -26,7 +26,6 @@ mongoose.connect(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors({
-    // origin: [ORIGIN_1, ORIGIN_2 , ORIGIN_3 , ORIGIN_4],
     origin: [ORIGIN_1, ORIGIN_2],
     optionsSuccessStatus: 200,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],

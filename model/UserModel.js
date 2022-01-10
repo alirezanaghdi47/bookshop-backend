@@ -59,12 +59,6 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    // carts: [
-    //     {
-    //         type: mongoose.Schema.Types.ObjectId,
-    //         ref: "Cart",
-    //     }
-    // ]
 }, {timestamps: true, versionKey: false});
 
 // schema methods
