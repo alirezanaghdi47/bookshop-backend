@@ -7,10 +7,9 @@ const {EMAIL_SERVICE_USERNAME, EMAIL_SERVICE_PASSWORD} = process.env;
 
 const mailTransporter = nodemailer.createTransport({
     host: "smtp-mail.outlook.com",
-    secureConnection: false,
     port: 587,
-    tls: {
-        ciphers:'SSLv3'
+    tls:{
+        rejectUnauthorized: false
     },
     auth: {
         user: EMAIL_SERVICE_USERNAME,
