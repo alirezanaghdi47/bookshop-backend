@@ -1,0 +1,30 @@
+const image_endpoint = "https://bookshop.s3.ir-thr-at1.arvanstorage.com";
+const arvan_cloud_endpoint = "https://s3.ir-thr-at1.arvanstorage.com";
+const arvan_cloud_access_key_id = "90695c65-bdf5-4cc2-b8b0-5ac049225141";
+const arvan_cloud_secret_access_key = "8564e233addfb63c1d5a14aa157fbe325453680217e2c2da8b052d9230e6a12d";
+const mongo_db_address = "mongodb://mongo:mongo@bookshop-database:27017/bookshop?authSource=admin&authMechanism=SCRAM-SHA-1";
+// const mongo_db_address = "mongodb://127.0.0.1:27017/bookshop";
+const origin_1 = "https://bookshop-alirezanaghdi.ir";
+// const origin_2 = "https://www.bookshop-alirezanaghdi.ir";
+const origin_2 = "http://localhost:3000";
+const secret_key = "0k24wV5vLWSMVfF2TUFi";
+const admin_email = "alirezanaghdi47@gmail.com";
+const admin_acl = "NX5ZZdJXBb";
+const user_acl = "aOeVkfPFHb";
+const email_service_username = "bookshop.alirezanaghdi@gmail.com";
+const email_service_password = "ali1234reza";
+
+// exports
+module.exports.image_endpoint = image_endpoint;
+module.exports.arvan_cloud_endpoint = arvan_cloud_endpoint;
+module.exports.arvan_cloud_access_key_id = arvan_cloud_access_key_id;
+module.exports.arvan_cloud_secret_access_key = arvan_cloud_secret_access_key;
+module.exports.mongo_db_address = mongo_db_address;
+module.exports.origin_1 = origin_1;
+module.exports.origin_2 = origin_2;
+module.exports.secret_key = secret_key;
+module.exports.admin_email = admin_email;
+module.exports.admin_acl = admin_acl;
+module.exports.user_acl = user_acl;
+module.exports.email_service_username = email_service_username;
+module.exports.email_service_password = email_service_password;

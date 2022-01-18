@@ -2,8 +2,8 @@ const sharp = require('sharp');
 const multer = require("multer");
 const {S3Client, PutObjectCommand} = require('@aws-sdk/client-s3');
 
-// variables
-const {ARVAN_CLOUD_ENPOINT, ARVAN_CLOUD_ACCESS_KEY_ID, ARVAN_CLOUD_SECRET_ACCESS_KEY} = process.env;
+// variable
+const {arvan_cloud_endpoint , arvan_cloud_secret_access_key , arvan_cloud_access_key_id} = require("../utils/variables.js");
 
 // config multer to get file
 const storage = multer.memoryStorage();
@@ -12,10 +12,10 @@ const upload = multer({storage: storage});
 // arvan config
 const s3 = new S3Client({
     region: 'default',
-    endpoint: ARVAN_CLOUD_ENPOINT,
+    endpoint: arvan_cloud_endpoint,
     credentials: {
-        accessKeyId: ARVAN_CLOUD_ACCESS_KEY_ID,
-        secretAccessKey: ARVAN_CLOUD_SECRET_ACCESS_KEY,
+        accessKeyId: arvan_cloud_access_key_id,
+        secretAccessKey: arvan_cloud_secret_access_key,
     },
 });
 

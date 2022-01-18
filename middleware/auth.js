@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
-// variables
-const {SECRET_KEY} = process.env;
+// variable
+const {secret_key} = require("../utils/variables.js");
 
 // middleware
 const auth = (req, res, next) => {
@@ -11,7 +11,7 @@ const auth = (req, res, next) => {
     if (!token) return res.status(401).send("ابتدا باید وارد حساب کاربری خود شوید");
 
     try {
-        req.user = jwt.verify(token, SECRET_KEY);
+        req.user = jwt.verify(token, secret_key);
         next();
     } catch (ex) {
         res.status(400).send("احراز هویت ناموفق بود");

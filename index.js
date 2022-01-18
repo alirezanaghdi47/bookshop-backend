@@ -1,18 +1,16 @@
-const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const express = require("express");
 const bodyParser = require('body-parser');
 const cors = require("cors");
 
-dotenv.config();
 const app = express();
 
-// variables
-const {MONGO_DB_ADDRESS, ORIGIN_1, ORIGIN_2} = process.env;
+// variable
+const {mongo_db_address , origin_1 , origin_2} = require("./utils/variables.js");
 
 // connect to database
 mongoose.connect(
-    MONGO_DB_ADDRESS,
+    mongo_db_address,
     {useNewUrlParser:true, useUnifiedTopology:true},
     (err) => {
         if (err) {
@@ -26,7 +24,7 @@ mongoose.connect(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors({
-    origin: [ORIGIN_1, ORIGIN_2],
+    origin: [origin_1, origin_2],
     optionsSuccessStatus: 200,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token'],

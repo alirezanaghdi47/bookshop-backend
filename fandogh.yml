@@ -1,0 +1,15 @@
+kind: ExternalService
+name: bookshop-backend
+spec:
+  allow_http: true
+  image: 'bookshop-backend:latest'
+  image_pull_policy: Always
+  path: /
+  port: 4000
+  replicas: 1
+  resources:
+    memory: 200Mi
+  source:
+    context: .
+    node_version: '16'
+    project_type: nodejs

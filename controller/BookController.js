@@ -3,8 +3,8 @@ const express = require("express");
 const router = express.Router();
 const fileType = require('file-type');
 
-// variables
-const {IMAGE_ENPOINT} = process.env;
+// variable
+const {image_endpoint} = require("../utils/variables.js");
 
 // model
 const {Book} = require("../model/BookModel");
@@ -165,7 +165,7 @@ router.post("/add-book", [auth, admin, upload.single("image")], async (req, res)
     // add book
     const book = new Book({
         name: req.body.name,
-        imageUrl: `${IMAGE_ENPOINT}/${filename}`,
+        imageUrl: `${image_endpoint}/${filename}`,
         year: req.body.year,
         lang: req.body.lang,
         pageCount: req.body.pageCount,
@@ -211,7 +211,7 @@ router.put("/edit-book/:id", [auth, admin, upload.single("image")], async (req, 
 
     // edit book
     book.name = req.body.name;
-    book.imageUrl = req.file !== undefined ? `${IMAGE_ENPOINT}/${filename}` : book.imageUrl;
+    book.imageUrl = req.file !== undefined ? `${image_endpoint}/${filename}` : book.imageUrl;
     book.year = req.body.year;
     book.lang = req.body.lang;
     book.pageCount = req.body.pageCount;
