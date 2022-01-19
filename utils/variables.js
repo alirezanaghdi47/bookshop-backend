@@ -5,8 +5,8 @@ const arvan_cloud_secret_access_key = "8564e233addfb63c1d5a14aa157fbe32545368021
 const mongo_db_address = "mongodb://mongo:mongo@bookshop-database:27017/bookshop?authSource=admin&authMechanism=SCRAM-SHA-1";
 // const mongo_db_address = "mongodb://127.0.0.1:27017/bookshop";
 const origin_1 = "https://bookshop-alirezanaghdi.ir";
-// const origin_2 = "https://www.bookshop-alirezanaghdi.ir";
-const origin_2 = "http://localhost:3000";
+const origin_2 = "https://www.bookshop-alirezanaghdi.ir";
+// const origin_2 = "http://localhost:3000";
 const secret_key = "0k24wV5vLWSMVfF2TUFi";
 const admin_email = "alirezanaghdi47@gmail.com";
 const admin_acl = "NX5ZZdJXBb";

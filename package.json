@@ -1,6 +1,6 @@
 {
    "name": "bookshop_backend",
-   "version": "1.7.0",
+   "version": "1.7.1",
    "description": "the university graduation project",
    "main": "index.js",
    "scripts": {
